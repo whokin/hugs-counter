@@ -10,12 +10,101 @@ body {
   color: #3a2340;
 }
 
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
 .app {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 16px;
   padding: 16px;
   text-align: center;
+}
+
+.count {
+  font-size: 6rem;
+  font-weight: 700;
+}
+
+.hug {
+  width: min(80vw, 280px);
+  padding: 28px;
+  font-size: 1.8rem;
+  border: 3px solid #3a2340;
+  border-radius: 24px;
+  background: #fff;
+}
+
+.undo {
+  padding: 8px 20px;
+  border: 2px solid #3a2340;
+  border-radius: 12px;
+  background: transparent;
+}
+
+.undo:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.link {
+  border: 0;
+  background: none;
+  padding: 8px;
+}
+
+.profiles {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(90vw, 320px);
+}
+
+.profiles li {
+  display: flex;
+  align-items: center;
+}
+
+.profile {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border: 2px solid #3a2340;
+  border-radius: 12px;
+  background: #fff;
+}
+
+form {
+  display: flex;
+  gap: 8px;
+  width: min(90vw, 320px);
+}
+
+input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px;
+  border: 2px solid #3a2340;
+  border-radius: 12px;
+}
+
+form button {
+  padding: 10px 16px;
+  border: 2px solid #3a2340;
+  border-radius: 12px;
+  background: #fff;
 }
