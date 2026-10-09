@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { load, save } from './storage'
 
 export default function App() {
   const [state, setState] = useState(load)
   const [name, setName] = useState('')
+  const [flyers, setFlyers] = useState([])
+  const nextFlyer = useRef(0)
 
   useEffect(() => save(state), [state])
 
@@ -26,6 +28,15 @@ export default function App() {
       ),
     }))
 
+  const hug = () => {
+    bump(1)
+    navigator.vibrate?.(20)
+    const id = nextFlyer.current++
+    const dx = Math.round(Math.random() * 160 - 80)
+    const emoji = ['🤗', '💖', '🫂', '✨'][id % 4]
+    setFlyers((f) => [...f.slice(-11), { id, dx, emoji }])
+  }
+
   const switchTo = (activeId) => setState((s) => ({ ...s, activeId }))
 
   const remove = (p) => {
@@ -42,8 +53,21 @@ export default function App() {
       <main className="app">
         <button className="link" onClick={() => switchTo(null)}>← Profiles</button>
         <h1>{active.name}</h1>
-        <div className="count" aria-live="polite">{active.count}</div>
-        <button className="hug" onClick={() => bump(1)}>🤗 Hug!</button>
+        <div className="count" key={active.count} aria-live="polite">{active.count}</div>
+        <div className="stage">
+          {flyers.map((f) => (
+            <span
+              key={f.id}
+              className="flyer"
+              style={{ '--dx': `${f.dx}px` }}
+              onAnimationEnd={() => setFlyers((all) => all.filter((x) => x.id !== f.id))}
+              aria-hidden="true"
+            >
+              {f.emoji}
+            </span>
+          ))}
+          <button className="hug" onClick={hug}>🤗 Hug!</button>
+        </div>
         <button className="undo" onClick={() => bump(-1)} disabled={active.count === 0}>−1</button>
       </main>
     )

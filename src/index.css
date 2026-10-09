@@ -1,13 +1,32 @@
+:root {
+  --ink: #4a2c5a;
+  --pink: #ffb3d1;
+  --bg: #ffe3ef;
+  --cream: #fff8e7;
+  --mint: #b8f0d8;
+  --sun: #ffe08a;
+  --pixel: 'Press Start 2P', ui-monospace, monospace;
+}
+
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   margin: 0;
   min-height: 100dvh;
-  font-family: system-ui, sans-serif;
-  background: #ffd6e7;
-  color: #3a2340;
+  font-family: var(--pixel);
+  font-size: 12px;
+  line-height: 1.5;
+  background-color: var(--bg);
+  /* pastel checkerboard */
+  background-image:
+    linear-gradient(45deg, #ffd0e4 25%, transparent 25%, transparent 75%, #ffd0e4 75%),
+    linear-gradient(45deg, #ffd0e4 25%, transparent 25%, transparent 75%, #ffd0e4 75%);
+  background-size: 32px 32px;
+  background-position: 0 0, 16px 16px;
+  color: var(--ink);
 }
 
 button,
@@ -18,6 +37,14 @@ input {
 
 button {
   cursor: pointer;
+  touch-action: manipulation;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  text-shadow: 3px 3px 0 var(--sun);
 }
 
 .app {
@@ -26,35 +53,65 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 20px;
   padding: 16px;
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
   text-align: center;
 }
 
+/* chunky retro box with a hard shadow */
+.count,
+.hug,
+.undo,
+.profile,
+input,
+form button {
+  border: 4px solid var(--ink);
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
 .count {
-  font-size: 6rem;
-  font-weight: 700;
+  min-width: 220px;
+  padding: 24px 16px;
+  font-size: 3.5rem;
+  background: var(--cream);
+  animation: pop 0.25s steps(4);
+}
+
+.stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .hug {
   width: min(80vw, 280px);
-  padding: 28px;
-  font-size: 1.8rem;
-  border: 3px solid #3a2340;
-  border-radius: 24px;
-  background: #fff;
+  padding: 28px 16px;
+  font-size: 1.2rem;
+  background: var(--pink);
+  position: relative;
+  z-index: 1;
+}
+
+.hug:active,
+.undo:active,
+.profile:active,
+form button:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--ink);
 }
 
 .undo {
-  padding: 8px 20px;
-  border: 2px solid #3a2340;
-  border-radius: 12px;
-  background: transparent;
+  padding: 10px 18px;
+  background: var(--mint);
 }
 
 .undo:disabled {
   opacity: 0.4;
   cursor: default;
+  transform: none;
+  box-shadow: 4px 4px 0 var(--ink);
 }
 
 .link {
@@ -69,42 +126,73 @@ button {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: min(90vw, 320px);
+  gap: 14px;
+  width: min(90vw, 340px);
 }
 
 .profiles li {
   display: flex;
   align-items: center;
+  gap: 4px;
 }
 
 .profile {
   flex: 1;
   display: flex;
   justify-content: space-between;
-  padding: 14px 16px;
-  border: 2px solid #3a2340;
-  border-radius: 12px;
-  background: #fff;
+  gap: 8px;
+  padding: 14px;
+  background: var(--cream);
 }
 
 form {
   display: flex;
-  gap: 8px;
-  width: min(90vw, 320px);
+  gap: 10px;
+  width: min(90vw, 340px);
 }
 
 input {
   flex: 1;
   min-width: 0;
   padding: 10px;
-  border: 2px solid #3a2340;
-  border-radius: 12px;
+  background: #fff;
 }
 
 form button {
-  padding: 10px 16px;
-  border: 2px solid #3a2340;
-  border-radius: 12px;
-  background: #fff;
+  padding: 10px 14px;
+  background: var(--sun);
+}
+
+/* emoji flies from the button up into the counter */
+.flyer {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 2;
+  animation: fly 0.8s ease-out forwards;
+}
+
+@keyframes fly {
+  from {
+    transform: translate(-50%, 0) scale(0.6);
+    opacity: 1;
+  }
+  to {
+    transform: translate(calc(-50% + var(--dx)), -220px) scale(1.4) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes pop {
+  0% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flyer,
+  .count {
+    animation: none;
+  }
 }
